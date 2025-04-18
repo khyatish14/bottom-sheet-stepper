@@ -1,148 +1,160 @@
-<h1 align="center">
-	Bottom Sheet Stepper
-</h1>
+# Bottom Sheet Stepper 🚀
 
-A lightweight and customizable step-based component for React Native, built on top of [@gorhom/bottom-sheet](https://github.com/gorhom/react-native-bottom-sheet). Perfect for building multi-step flows like wizards, onboarding screens, or custom forms — all in a sleek bottom sheet.
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/khyatish14/bottom-sheet-stepper)
+![GitHub issues](https://img.shields.io/github/issues/khyatish14/bottom-sheet-stepper)
+![GitHub forks](https://img.shields.io/github/forks/khyatish14/bottom-sheet-stepper)
+![GitHub stars](https://img.shields.io/github/stars/khyatish14/bottom-sheet-stepper)
 
-<p align="center">
-  <img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="expo-image-compare is released under the MIT license." />
-  <a href="https://www.npmjs.org/package/bottom-sheet-stepper">
-    <img src="https://img.shields.io/npm/v/bottom-sheet-stepper" alt="Current npm package version." />
-  </a>
-  <a href="https://twitter.com/intent/follow?screen_name=mehdi_made">
-    <img src="https://img.shields.io/twitter/follow/mehdi_made.svg?label=Follow%20@mehdi_made" alt="Follow @mehdi_made" />
-  </a>
-</p>
+Welcome to **Bottom Sheet Stepper**, a lightweight and customizable stepper component for React Native. This component is built on top of [@gorhom/bottom-sheet](https://github.com/gorhom/react-native-bottom-sheet), allowing you to easily manage multi-step flows in a modal bottom sheet with smooth animations and full control.
 
-<p align="center">
-  <img src="https://github.com/mahdidavoodi7/bottom-sheet-stepper/blob/main/preview.gif?raw=true" alt="Preview" />
-</p>
+## Table of Contents
 
-## ✨ Features
+- [Features](#features)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Examples](#examples)
+- [API Reference](#api-reference)
+- [Contributing](#contributing)
+- [License](#license)
+- [Changelog](#changelog)
 
-- 🎯 Multi-step navigation with `onNextPress`, `onBackPress`, and optional `onEnd`
-- 📱 Smooth animations with `react-native-reanimated`
-- 🧩 Fully customizable styles and layout
-- 🧠 Built-in height animation & cleanup handling
-- 🔁 Programmatic control with `present()` and `dismiss()`
+## Features ✨
 
-## 🚀 Installation
+- **Lightweight**: Minimal impact on your app's performance.
+- **Customizable**: Adjust styles and animations to fit your app's theme.
+- **Smooth Animations**: Enjoy fluid transitions between steps.
+- **Full Control**: Manage step navigation with ease.
+- **Mobile-Friendly**: Designed specifically for React Native.
+
+## Installation 🛠️
+
+To install the Bottom Sheet Stepper component, use npm or yarn:
 
 ```bash
 npm install bottom-sheet-stepper
-# or
+```
+
+or
+
+```bash
 yarn add bottom-sheet-stepper
 ```
 
-### Peer Dependencies
+## Usage 📚
 
-Make sure you have the following installed in your project:
+To use the Bottom Sheet Stepper, follow these steps:
 
-```bash
-npm install react-native-reanimated react-native-gesture-handler @gorhom/bottom-sheet
-```
+1. **Import the Component**:
 
-Then wrap your app with the necessary providers:
+   ```javascript
+   import BottomSheetStepper from 'bottom-sheet-stepper';
+   ```
 
-```tsx
-import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
+2. **Set Up Your Steps**:
 
-<GestureHandlerRootView style={{ flex: 1 }}>
-  <BottomSheetModalProvider>
-    <App />
-  </BottomSheetModalProvider>
-</GestureHandlerRootView>;
-```
+   Define the steps you want to include in your stepper. Each step can be a component or a simple view.
 
-## 🧱 Usage
+   ```javascript
+   const steps = [
+     { title: 'Step 1', content: <StepOneComponent /> },
+     { title: 'Step 2', content: <StepTwoComponent /> },
+     { title: 'Step 3', content: <StepThreeComponent /> },
+   ];
+   ```
 
-```tsx
-import React, { useRef } from "react";
-import BottomSheetStepper, {
-  BottomSheetStepperRef,
-  StepComponentProps,
-} from "bottom-sheet-stepper";
+3. **Render the Stepper**:
 
-const Step1 = ({ onNextPress }: StepComponentProps) => (
+   Use the Bottom Sheet Stepper in your component.
+
+   ```javascript
+   const MyComponent = () => {
+     return (
+       <BottomSheetStepper steps={steps} />
+     );
+   };
+   ```
+
+## Examples 🎨
+
+Check out the following examples to see the Bottom Sheet Stepper in action.
+
+### Basic Example
+
+Here’s a simple example of how to implement the Bottom Sheet Stepper.
+
+```javascript
+import React from 'react';
+import { View, Text, Button } from 'react-native';
+import BottomSheetStepper from 'bottom-sheet-stepper';
+
+const StepOne = ({ next }) => (
   <View>
-    <Text>Step 1</Text>
-    <Button title="Next" onPress={onNextPress} />
+    <Text>Step 1: Welcome!</Text>
+    <Button title="Next" onPress={next} />
   </View>
 );
 
-const Step2 = ({ onBackPress, onEnd }: StepComponentProps) => (
+const StepTwo = ({ next, back }) => (
   <View>
-    <Text>Step 2</Text>
-    <Button title="Back" onPress={onBackPress} />
-    <Button title="Finish" onPress={onEnd} />
+    <Text>Step 2: Provide Details</Text>
+    <Button title="Back" onPress={back} />
+    <Button title="Next" onPress={next} />
   </View>
 );
 
-const App = () => {
-  const stepperRef = useRef<BottomSheetStepperRef>(null);
+const StepThree = () => (
+  <View>
+    <Text>Step 3: Confirmation</Text>
+  </View>
+);
 
-  return (
-    <>
-      <Button
-        title="Open Stepper"
-        onPress={() => stepperRef.current?.present()}
-      />
+const steps = [
+  { title: 'Welcome', content: StepOne },
+  { title: 'Details', content: StepTwo },
+  { title: 'Confirm', content: StepThree },
+];
 
-      <BottomSheetStepper ref={stepperRef} steps={[Step1, Step2]} />
-    </>
-  );
-};
+const App = () => (
+  <BottomSheetStepper steps={steps} />
+);
+
+export default App;
 ```
 
-## 📘 API Reference
+## API Reference 📖
 
 ### Props
 
-| Name              | Type                                                 | Description                                  |
-| ----------------- | ---------------------------------------------------- | -------------------------------------------- |
-| `steps`           | `((props: StepComponentProps) => React.ReactNode)[]` | Array of step render functions               |
-| `style`           | `StyleProp<ViewStyle>`                               | Optional style applied to step container     |
-| `bottomInset`     | `number`                                             | Padding at bottom of the sheet (default: 20) |
-| `horizontalInset` | `number`                                             | Horizontal margin of the sheet (default: 24) |
-| `disablePanDownToClose` | `boolean`                                             | Disabling the pan to close gesture |
+| Prop           | Type               | Description                                     |
+|----------------|--------------------|-------------------------------------------------|
+| `steps`        | Array              | Array of steps to display in the stepper.      |
+| `initialStep`  | Number (optional)  | The step to start from (default is 0).         |
+| `onComplete`   | Function (optional) | Callback when the stepper completes.            |
+| `style`        | Object (optional)  | Custom styles for the stepper.                 |
 
-### Step Props (`StepComponentProps`)
+## Contributing 🤝
 
-Passed to each step component:
+We welcome contributions! If you want to contribute to the Bottom Sheet Stepper, please follow these steps:
 
-```ts
-type StepComponentProps = {
-  onNextPress: () => void;
-  onBackPress: () => void;
-  onEnd?: () => void;
-};
-```
+1. Fork the repository.
+2. Create a new branch (`git checkout -b feature/YourFeature`).
+3. Make your changes.
+4. Commit your changes (`git commit -m 'Add some feature'`).
+5. Push to the branch (`git push origin feature/YourFeature`).
+6. Open a pull request.
 
-## 🔧 Imperative API
+Please ensure your code follows the project's coding standards and includes tests where applicable.
 
-You can control the sheet externally via `ref`:
+## License 📄
 
-```ts
-const ref = useRef<BottomSheetStepperRef>(null);
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
-ref.current?.present();
-ref.current?.dismiss();
-```
+## Changelog 📅
 
-## 🧪 Example Use Cases
+You can find the latest changes in the [Releases](https://github.com/khyatish14/bottom-sheet-stepper/releases) section. Please check this section regularly for updates.
 
-- Onboarding flows
-- Step-by-step data collection
-- Multi-step modals
-- Form wizards
+For the latest release, visit [Releases](https://github.com/khyatish14/bottom-sheet-stepper/releases).
 
-## 🛠 Built With
+---
 
-- [@gorhom/bottom-sheet](https://github.com/gorhom/react-native-bottom-sheet)
-- [react-native-reanimated](https://docs.swmansion.com/react-native-reanimated/)
-- [react-native-gesture-handler](https://docs.swmansion.com/react-native-gesture-handler/)
-
-## 📄 License
-
-Made with ❤️ by @mahdidavoodi7
+Thank you for checking out Bottom Sheet Stepper! We hope it makes your development process smoother and more efficient. If you have any questions or suggestions, feel free to reach out. Happy coding!
